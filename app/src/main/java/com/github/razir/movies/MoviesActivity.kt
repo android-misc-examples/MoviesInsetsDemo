@@ -45,8 +45,6 @@ class MoviesActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             moviesRootLayout.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or
                     SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        } else {
-            moviesRecyclerView.updatePadding(top = toolbarHeight + baseMoviesPadding)
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(moviesRecyclerView) { view, insets ->

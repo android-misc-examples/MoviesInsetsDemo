@@ -15,8 +15,6 @@ fun getTestData(): List<Movie> {
         Movie("https://m.media-amazon.com/images/M/MV5BNjU4NjU4ZDktOTg2Ny00MWI2LThiMTAtMGFkZGE1MWI5MzhjXkEyXkFqcGdeQXVyODQxMTI4MjM@._V1_UY209_CR0,0,140,209_AL_.jpg"),
         Movie("https://m.media-amazon.com/images/M/MV5BMTU2ODk2ODEzMV5BMl5BanBnXkFtZTgwMzk1OTk4NjM@._V1_UX140_CR0,0,140,209_AL_.jpg"),
         Movie("https://m.media-amazon.com/images/M/MV5BNjMxMDE0MDI1Ml5BMl5BanBnXkFtZTgwMzExNTU3NjM@._V1_UY209_CR0,0,140,209_AL_.jpg"),
-        Movie("https://m.media-amazon.com/images/M/MV5BMTU2NDYwNzkzMV5BMl5BanBnXkFtZTgwNjAyMjMxNzM@._V1_UX140_CR0,0,140,209_AL_.jpg"),
-        Movie("https://m.media-amazon.com/images/M/MV5BMjUyNjg1ODIwMl5BMl5BanBnXkFtZTgwNjMyOTYzNzM@._V1_UX140_CR0,0,140,209_AL_.jpg"),
-        Movie("https://m.media-amazon.com/images/M/MV5BMjUyNjg1ODIwMl5BMl5BanBnXkFtZTgwNjMyOTYzNzM@._V1_UX140_CR0,0,140,209_AL_.jpg")
+        Movie("https://m.media-amazon.com/images/M/MV5BMTU2NDYwNzkzMV5BMl5BanBnXkFtZTgwNjAyMjMxNzM@._V1_UX140_CR0,0,140,209_AL_.jpg")
     )
 }

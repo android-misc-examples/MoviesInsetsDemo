@@ -1,5 +1,7 @@
 package com.github.razir.movies
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,12 +18,15 @@ import com.github.razir.movies.utils.GridItemDecorator
 import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
 import android.util.DisplayMetrics
+import android.view.Window
 
 
 class MoviesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.argb(128, 0, 0, 0)))
         setContentView(R.layout.activity_movies)
         initView()
         setupInsets()
@@ -29,7 +34,7 @@ class MoviesActivity : AppCompatActivity() {
 
     private fun setupInsets() {
         val baseMoviesPadding = pxFromDp(10f)
-        val toolbarHeight = moviesToolbar.layoutParams.height
+        val toolbarHeight = 10
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             moviesRootLayout.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -38,11 +43,11 @@ class MoviesActivity : AppCompatActivity() {
             moviesRecyclerView.updatePadding(top = toolbarHeight + baseMoviesPadding)
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(moviesToolbar) { view, insets ->
-            moviesToolbar.setMarginTop(insets.systemWindowInsetTop)
-            moviesRecyclerView.updatePadding(top = toolbarHeight + insets.systemWindowInsetTop + baseMoviesPadding)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(moviesToolbar) { view, insets ->
+////            moviesToolbar.setMarginTop(insets.systemWindowInsetTop)
+//            moviesRecyclerView.updatePadding(top = toolbarHeight + insets.systemWindowInsetTop + baseMoviesPadding)
+//            insets
+//        }
 
         ViewCompat.setOnApplyWindowInsetsListener(moviesRecyclerView) { view, insets ->
             moviesRecyclerView.updatePadding(bottom = insets.systemWindowInsetBottom)

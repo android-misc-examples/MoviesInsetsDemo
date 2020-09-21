@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    FIXME manual padding set, find how to measure actionbar width-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/moviesRecyclerView"
-        android:paddingTop="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false" />

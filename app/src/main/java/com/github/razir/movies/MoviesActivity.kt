@@ -18,6 +18,7 @@ import com.github.razir.movies.utils.GridItemDecorator
 import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.Window
 
 
@@ -34,7 +35,12 @@ class MoviesActivity : AppCompatActivity() {
 
     private fun setupInsets() {
         val baseMoviesPadding = pxFromDp(10f)
-        val toolbarHeight = 10
+        var toolbarHeight = 0
+
+        val tv = TypedValue()
+        if (theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            toolbarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             moviesRootLayout.systemUiVisibility = SYSTEM_UI_FLAG_LAYOUT_STABLE or
@@ -43,14 +49,10 @@ class MoviesActivity : AppCompatActivity() {
             moviesRecyclerView.updatePadding(top = toolbarHeight + baseMoviesPadding)
         }
 
-//        ViewCompat.setOnApplyWindowInsetsListener(moviesToolbar) { view, insets ->
-////            moviesToolbar.setMarginTop(insets.systemWindowInsetTop)
-//            moviesRecyclerView.updatePadding(top = toolbarHeight + insets.systemWindowInsetTop + baseMoviesPadding)
-//            insets
-//        }
-
         ViewCompat.setOnApplyWindowInsetsListener(moviesRecyclerView) { view, insets ->
-            moviesRecyclerView.updatePadding(bottom = insets.systemWindowInsetBottom)
+            moviesRecyclerView.updatePadding(
+                top = insets.systemWindowInsetTop + baseMoviesPadding,
+                bottom = insets.systemWindowInsetBottom)
             insets
         }
     }

@@ -7,19 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.View.*
-import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.marginTop
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.razir.movies.utils.GridItemDecorator
 import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Window
+import androidx.core.view.*
 
 
 class MoviesActivity : AppCompatActivity() {
@@ -28,13 +23,45 @@ class MoviesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.argb(128, 0, 0, 0)))
+        if(hidden) supportActionBar?.hide()
         setContentView(R.layout.activity_movies)
         initView()
         setupInsets()
+
+        Thread {
+            Thread.sleep(10000)
+            runOnUiThread {
+                hidden = !hidden
+                val x = intent
+                finish()
+                startActivity(x)
+            }
+        }.start()
+    }
+
+    fun getInsetPaddingFn(baseMoviesPadding: Int): (View, WindowInsetsCompat) -> WindowInsetsCompat {
+        if(!hidden)
+            return {view: View, insets: WindowInsetsCompat ->
+                moviesRecyclerView.updatePadding(
+                    top = insets.systemWindowInsetTop + baseMoviesPadding,
+                    bottom = insets.systemWindowInsetBottom)
+//                hideActionBarButton.updatePadding(
+//                    top = insets.systemWindowInsetTop + baseMoviesPadding,
+//                    bottom = insets.systemWindowInsetBottom)
+                insets}
+        else
+            return {view: View, insets: WindowInsetsCompat ->
+                moviesRecyclerView.updatePadding(
+                    top = baseMoviesPadding,
+                    bottom = insets.systemWindowInsetBottom)
+//                hideActionBarButton.updatePadding(
+//                    top = insets.systemWindowInsetTop + baseMoviesPadding,
+//                    bottom = insets.systemWindowInsetBottom)
+                insets}
     }
 
     private fun setupInsets() {
-        val baseMoviesPadding = pxFromDp(10f)
+        val baseMoviesPadding = pxFromDp(24f)
         var toolbarHeight = 0
 
         val tv = TypedValue()
@@ -47,12 +74,7 @@ class MoviesActivity : AppCompatActivity() {
                     SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
 
-        ViewCompat.setOnApplyWindowInsetsListener(moviesRecyclerView) { view, insets ->
-            moviesRecyclerView.updatePadding(
-                top = insets.systemWindowInsetTop + baseMoviesPadding,
-                bottom = insets.systemWindowInsetBottom)
-            insets
-        }
+        ViewCompat.setOnApplyWindowInsetsListener(moviesRecyclerView, getInsetPaddingFn(baseMoviesPadding))
     }
 
     private fun initView() {
@@ -63,11 +85,19 @@ class MoviesActivity : AppCompatActivity() {
         }
     }
 
-    private fun View.setMarginTop(value: Int) = updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        topMargin = value
-    }
-
     private fun pxFromDp(dp: Float): Int {
         return (dp * resources.displayMetrics.density).toInt()
+    }
+
+    fun toggleActionBar() {
+        if(hidden)
+            supportActionBar?.show()
+        else
+            supportActionBar?.hide()
+        hidden = !hidden
+    }
+
+    companion object {
+        var hidden = true
     }
 }

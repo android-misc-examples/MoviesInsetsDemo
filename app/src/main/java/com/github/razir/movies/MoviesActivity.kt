@@ -25,38 +25,51 @@ class MoviesActivity : AppCompatActivity() {
         supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.argb(128, 0, 0, 0)))
         if(hidden) supportActionBar?.hide()
         setContentView(R.layout.activity_movies)
+
         initView()
         setupInsets()
 
-        Thread {
-            Thread.sleep(10000)
-            runOnUiThread {
-                hidden = !hidden
-                val x = intent
-                finish()
-                startActivity(x)
-            }
-        }.start()
+        hiddenInsetsPadding = mutableMapOf("top" to moviesRecyclerView.paddingTop + pxFromDp(24f),
+                                        "bottom" to moviesRecyclerView.paddingBottom + pxFromDp(48f))
+
+//        Thread {
+//            Thread.sleep(10000)
+//            runOnUiThread {
+//                hidden = !hidden
+//                val x = intent
+//                finish()
+//                startActivity(x)
+//            }
+//        }.start()
     }
 
+    var hiddenInsetsPadding : MutableMap<String, Int> = mutableMapOf()
+    var actionBarInsetsPadding : MutableMap<String, Int> = mutableMapOf()
+
     fun getInsetPaddingFn(baseMoviesPadding: Int): (View, WindowInsetsCompat) -> WindowInsetsCompat {
+
+//        window.decorView.rootWindowInsets
         if(!hidden)
             return {view: View, insets: WindowInsetsCompat ->
                 moviesRecyclerView.updatePadding(
                     top = insets.systemWindowInsetTop + baseMoviesPadding,
                     bottom = insets.systemWindowInsetBottom)
-//                hideActionBarButton.updatePadding(
-//                    top = insets.systemWindowInsetTop + baseMoviesPadding,
-//                    bottom = insets.systemWindowInsetBottom)
+                actionBarInsetsPadding["top"] = insets.systemWindowInsetTop + baseMoviesPadding
+                actionBarInsetsPadding["bottom"] = insets.systemWindowInsetBottom
+                hideActionBarButton.updatePadding(
+                    top = insets.systemWindowInsetTop + baseMoviesPadding,
+                    bottom = insets.systemWindowInsetBottom)
                 insets}
         else
             return {view: View, insets: WindowInsetsCompat ->
                 moviesRecyclerView.updatePadding(
                     top = baseMoviesPadding,
                     bottom = insets.systemWindowInsetBottom)
-//                hideActionBarButton.updatePadding(
-//                    top = insets.systemWindowInsetTop + baseMoviesPadding,
-//                    bottom = insets.systemWindowInsetBottom)
+//                hiddenInsetsPadding["top"] = insets.systemWindowInsetTop + baseMoviesPadding
+//                hiddenInsetsPadding["bottom"] = insets.systemWindowInsetBottom
+                hideActionBarButton.updatePadding(
+                    top = insets.systemWindowInsetTop + baseMoviesPadding,
+                    bottom = insets.systemWindowInsetBottom)
                 insets}
     }
 
@@ -89,15 +102,20 @@ class MoviesActivity : AppCompatActivity() {
         return (dp * resources.displayMetrics.density).toInt()
     }
 
-    fun toggleActionBar() {
+    fun toggleActionBar(unused: View) {
         if(hidden)
             supportActionBar?.show()
         else
             supportActionBar?.hide()
         hidden = !hidden
+
+        if(hidden)
+            moviesRecyclerView.updatePadding(top=hiddenInsetsPadding["top"]!!,bottom=hiddenInsetsPadding["bottom"]!!)
+        else
+            moviesRecyclerView.updatePadding(top=actionBarInsetsPadding["top"]!!,bottom=actionBarInsetsPadding["bottom"]!!)
     }
 
     companion object {
-        var hidden = true
+        var hidden = false
     }
 }

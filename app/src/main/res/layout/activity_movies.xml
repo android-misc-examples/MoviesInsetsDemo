@@ -11,13 +11,13 @@
         android:layout_height="match_parent"
         android:clipToPadding="false" />
 
-<!--    <ImageButton-->
-<!--        android:background="@android:color/transparent"-->
-<!--        android:id="@+id/hideActionBarButton"-->
-<!--        android:onClick="toggleActionBar"-->
-<!--        android:src="@android:drawable/btn_star_big_on"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content" />-->
+    <ImageButton
+        android:background="@android:color/transparent"
+        android:id="@+id/hideActionBarButton"
+        android:onClick="toggleActionBar"
+        android:src="@android:drawable/btn_star_big_on"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 <!--    <com.google.android.material.appbar.AppBarLayout-->
 <!--        android:id="@+id/moviesAppBar"-->

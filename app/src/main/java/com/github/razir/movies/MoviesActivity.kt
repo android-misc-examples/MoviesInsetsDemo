@@ -1,5 +1,6 @@
 package com.github.razir.movies
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -22,6 +23,7 @@ class MoviesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.argb(128, 0, 0, 0)))
+
         if(hidden) supportActionBar?.hide()
         setContentView(R.layout.activity_movies)
 
@@ -63,13 +65,36 @@ class MoviesActivity : AppCompatActivity() {
             supportActionBar?.hide()
         hidden = !hidden
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            listOf(hideActionBarButton, moviesRecyclerView).forEach{
-                if(hidden)
-                    it.updatePadding(top=hiddenInsetsPadding["top"]!!,bottom=hiddenInsetsPadding["bottom"]!!)
-                else
-                    it.updatePadding(top=actionBarInsetsPadding["top"]!!,bottom=actionBarInsetsPadding["bottom"]!!)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // FIXME generalize for all 4 rotation angles (0, 90, 180, 270)
+            if(resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE)
+                listOf(hideActionBarButton, moviesRecyclerView).forEach {
+                    if (hidden)
+                        it.updatePadding(
+                            top = hiddenInsetsPadding["top"]!!,
+                            bottom = hiddenInsetsPadding["bottom"]!!
+                        )
+                    else
+                        it.updatePadding(
+                            top = actionBarInsetsPadding["top"]!!,
+                            bottom = actionBarInsetsPadding["bottom"]!!
+                        )
+                }
+            else {
+                listOf(hideActionBarButton, moviesRecyclerView).forEach {
+                    if (hidden)
+                        it.updatePadding(
+                            top = hiddenInsetsPadding["top"]!!,
+                            left = hiddenInsetsPadding["bottom"]!!
+                        )
+                    else
+                        it.updatePadding(
+                            top = actionBarInsetsPadding["top"]!!,
+                            left = actionBarInsetsPadding["bottom"]!!
+                        )
+                }
             }
+        }
     }
 
     companion object {

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.github.razir.movies.utils.GridItemDecorator
 import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
-import android.util.TypedValue
 import android.view.Window
 import androidx.core.view.*
 
@@ -64,12 +63,13 @@ class MoviesActivity : AppCompatActivity() {
             supportActionBar?.hide()
         hidden = !hidden
 
-        listOf(hideActionBarButton, moviesRecyclerView).forEach{
-            if(hidden)
-                it.updatePadding(top=hiddenInsetsPadding["top"]!!,bottom=hiddenInsetsPadding["bottom"]!!)
-            else
-                it.updatePadding(top=actionBarInsetsPadding["top"]!!,bottom=actionBarInsetsPadding["bottom"]!!)
-        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            listOf(hideActionBarButton, moviesRecyclerView).forEach{
+                if(hidden)
+                    it.updatePadding(top=hiddenInsetsPadding["top"]!!,bottom=hiddenInsetsPadding["bottom"]!!)
+                else
+                    it.updatePadding(top=actionBarInsetsPadding["top"]!!,bottom=actionBarInsetsPadding["bottom"]!!)
+            }
     }
 
     companion object {

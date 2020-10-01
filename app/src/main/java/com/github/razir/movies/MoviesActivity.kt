@@ -2,9 +2,11 @@ package com.github.razir.movies
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.hardware.display.DisplayManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.Surface
 import android.view.View
 import android.view.View.*
@@ -14,6 +16,7 @@ import com.github.razir.movies.utils.GridItemDecorator
 import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
 import android.view.Window
+import android.widget.Toast
 import androidx.core.view.*
 
 
@@ -76,6 +79,30 @@ class MoviesActivity : AppCompatActivity() {
             )
         }
 
+        if(dm == null) {
+            refreshPaddings()
+
+            val dl = object : DisplayManager.DisplayListener {
+                override fun onDisplayAdded(p0: Int) {
+
+                }
+
+                override fun onDisplayRemoved(p0: Int) {
+
+                }
+
+                override fun onDisplayChanged(p0: Int) {
+                    Toast.makeText(this@MoviesActivity, "Current orientation: "+windowManager.defaultDisplay.rotation, Toast.LENGTH_SHORT).show()
+                    refreshPaddings()
+                }
+            }
+
+            dm = getSystemService(DISPLAY_SERVICE) as DisplayManager
+            dm?.registerDisplayListener(dl,h)
+        }
+    }
+
+    fun refreshPaddings() {
         hidden = !hidden
         toggleActionBar(null)
     }
@@ -123,5 +150,7 @@ class MoviesActivity : AppCompatActivity() {
         var hidden = false
         var insetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
         var hiddenInsetsPadding : MutableMap<String, Int> = mutableMapOf()
+        val h = Handler()
+        var dm: DisplayManager? = null
     }
 }

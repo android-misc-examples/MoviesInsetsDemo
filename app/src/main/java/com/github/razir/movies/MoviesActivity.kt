@@ -1,11 +1,11 @@
 package com.github.razir.movies
 
-import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Surface
 import android.view.View
 import android.view.View.*
 import androidx.core.content.ContextCompat
@@ -34,17 +34,51 @@ class MoviesActivity : AppCompatActivity() {
                     SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         }
 
-        hiddenInsetsPadding = mutableMapOf("top" to moviesRecyclerView.paddingTop + pxFromDp(24f),
-                                        "bottom" to moviesRecyclerView.paddingBottom + pxFromDp(48f))
-        actionBarInsetsPadding = mutableMapOf("top" to moviesRecyclerView.paddingTop + pxFromDp(81f),
-                                        "bottom" to moviesRecyclerView.paddingBottom + pxFromDp(48f))
+        if(insetsPadding.isEmpty()) {
+            insetsPadding = mutableMapOf(
+                Surface.ROTATION_0 to
+                        mutableMapOf(
+                            "top" to pxFromDp(81f),
+                            "left" to 0,
+                            "bottom" to pxFromDp(48f),
+                            "right" to 0
+                        ),
+                Surface.ROTATION_90 to
+                        mutableMapOf(
+                            "top" to pxFromDp(81f),
+                            "left" to 0,
+                            "bottom" to 0,
+                            "right" to pxFromDp(48f)
+                        ),
+
+                Surface.ROTATION_180 to // TODO not always called, enable setting first
+                        mutableMapOf(
+                            "top" to pxFromDp(81f),
+                            "left" to 0,
+                            "bottom" to pxFromDp(48f),
+                            "right" to 0
+                        ),
+
+
+                Surface.ROTATION_270 to
+                        mutableMapOf(
+                            "top" to pxFromDp(81f),
+                            "left" to pxFromDp(48f),
+                            "bottom" to 0,
+                            "right" to 0
+                        )
+
+            )
+
+            hiddenInsetsPadding = mutableMapOf(
+                "top" to moviesRecyclerView.paddingTop + pxFromDp(24f),
+                "bottom" to moviesRecyclerView.paddingBottom + pxFromDp(48f)
+            )
+        }
 
         hidden = !hidden
         toggleActionBar(null)
     }
-
-    var hiddenInsetsPadding : MutableMap<String, Int> = mutableMapOf()
-    var actionBarInsetsPadding : MutableMap<String, Int> = mutableMapOf()
 
     private fun initView() {
         moviesRecyclerView.apply {
@@ -66,38 +100,28 @@ class MoviesActivity : AppCompatActivity() {
         hidden = !hidden
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // FIXME generalize for all 4 rotation angles (0, 90, 180, 270)
-            if(resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE)
-                listOf(hideActionBarButton, moviesRecyclerView).forEach {
-                    if (hidden)
-                        it.updatePadding(
-                            top = hiddenInsetsPadding["top"]!!,
-                            bottom = hiddenInsetsPadding["bottom"]!!
-                        )
-                    else
-                        it.updatePadding(
-                            top = actionBarInsetsPadding["top"]!!,
-                            bottom = actionBarInsetsPadding["bottom"]!!
-                        )
-                }
-            else {
-                listOf(hideActionBarButton, moviesRecyclerView).forEach {
-                    if (hidden)
-                        it.updatePadding(
-                            top = hiddenInsetsPadding["top"]!!,
-                            left = hiddenInsetsPadding["bottom"]!!
-                        )
-                    else
-                        it.updatePadding(
-                            top = actionBarInsetsPadding["top"]!!,
-                            left = actionBarInsetsPadding["bottom"]!!
-                        )
-                }
+            val degrees = windowManager.defaultDisplay.rotation
+
+            listOf(hideActionBarButton, moviesRecyclerView).forEach {
+                if (hidden)
+                    it.updatePadding(
+                        top = hiddenInsetsPadding["top"]!!,
+                        bottom = hiddenInsetsPadding["bottom"]!!
+                    )
+                else
+                    it.updatePadding(
+                        top = insetsPadding[degrees]!!["top"]!!,
+                        left = insetsPadding[degrees]!!["left"]!!,
+                        bottom = insetsPadding[degrees]!!["bottom"]!!,
+                        right = insetsPadding[degrees]!!["right"]!!
+                    )
             }
         }
     }
 
     companion object {
-        var hidden = true
+        var hidden = false
+        var insetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
+        var hiddenInsetsPadding : MutableMap<String, Int> = mutableMapOf()
     }
 }

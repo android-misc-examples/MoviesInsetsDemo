@@ -53,16 +53,13 @@ class MoviesActivity : AppCompatActivity() {
                             "bottom" to 0,
                             "right" to pxFromDp(48f)
                         ),
-
-                Surface.ROTATION_180 to // TODO not always called, enable setting first
+                Surface.ROTATION_180 to // not always called, have to enable setting first
                         mutableMapOf(
                             "top" to pxFromDp(81f),
                             "left" to 0,
                             "bottom" to pxFromDp(48f),
                             "right" to 0
                         ),
-
-
                 Surface.ROTATION_270 to
                         mutableMapOf(
                             "top" to pxFromDp(81f),
@@ -74,8 +71,35 @@ class MoviesActivity : AppCompatActivity() {
             )
 
             hiddenInsetsPadding = mutableMapOf(
-                "top" to moviesRecyclerView.paddingTop + pxFromDp(24f),
-                "bottom" to moviesRecyclerView.paddingBottom + pxFromDp(48f)
+                Surface.ROTATION_0 to
+                        mutableMapOf(
+                            "top" to pxFromDp(24f),
+                            "left" to 0,
+                            "bottom" to pxFromDp(48f),
+                            "right" to 0
+                        ),
+                Surface.ROTATION_90 to
+                        mutableMapOf(
+                            "top" to pxFromDp(24f),
+                            "left" to 0,
+                            "bottom" to 0,
+                            "right" to pxFromDp(48f)
+                        ),
+                Surface.ROTATION_180 to // not always called, have to enable setting first
+                        mutableMapOf(
+                            "top" to pxFromDp(24f),
+                            "left" to 0,
+                            "bottom" to pxFromDp(48f),
+                            "right" to 0
+                        ),
+                Surface.ROTATION_270 to
+                        mutableMapOf(
+                            "top" to pxFromDp(24f),
+                            "left" to pxFromDp(48f),
+                            "bottom" to 0,
+                            "right" to 0
+                        )
+
             )
         }
 
@@ -132,8 +156,10 @@ class MoviesActivity : AppCompatActivity() {
             listOf(hideActionBarButton, moviesRecyclerView).forEach {
                 if (hidden)
                     it.updatePadding(
-                        top = hiddenInsetsPadding["top"]!!,
-                        bottom = hiddenInsetsPadding["bottom"]!!
+                        top = hiddenInsetsPadding[degrees]!!["top"]!!,
+                        left = hiddenInsetsPadding[degrees]!!["left"]!!,
+                        bottom = hiddenInsetsPadding[degrees]!!["bottom"]!!,
+                        right = hiddenInsetsPadding[degrees]!!["right"]!!
                     )
                 else
                     it.updatePadding(
@@ -149,7 +175,7 @@ class MoviesActivity : AppCompatActivity() {
     companion object {
         var hidden = false
         var insetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
-        var hiddenInsetsPadding : MutableMap<String, Int> = mutableMapOf()
+        var hiddenInsetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
         val h = Handler()
         var dm: DisplayManager? = null
     }

@@ -49,8 +49,6 @@ class MoviesActivity : AppCompatActivity() {
         }
     }
 
-
-
     fun toggleActionBar(unused: View?) {
         if(PaddingManager.hidden)
             supportActionBar?.show()

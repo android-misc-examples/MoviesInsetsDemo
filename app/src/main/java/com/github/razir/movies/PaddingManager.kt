@@ -3,6 +3,7 @@ package com.github.razir.movies
 import android.hardware.display.DisplayManager
 import android.os.Build
 import android.os.Handler
+import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.View
 import android.widget.Toast
@@ -17,69 +18,134 @@ class PaddingManager(val activity: AppCompatActivity) {
 
     fun createMaps() {
         if(insetsPadding.isEmpty()) {
-            insetsPadding = mutableMapOf(
-                Surface.ROTATION_0 to
-                        mutableMapOf(
-                            "top" to pxFromDp(81f),
-                            "left" to 0,
-                            "bottom" to pxFromDp(48f),
-                            "right" to 0
-                        ),
-                Surface.ROTATION_90 to
-                        mutableMapOf(
-                            "top" to pxFromDp(81f),
-                            "left" to 0,
-                            "bottom" to 0,
-                            "right" to pxFromDp(48f)
-                        ),
-                Surface.ROTATION_180 to // not always called, have to enable setting first
-                        mutableMapOf(
-                            "top" to pxFromDp(81f),
-                            "left" to 0,
-                            "bottom" to pxFromDp(48f),
-                            "right" to 0
-                        ),
-                Surface.ROTATION_270 to
-                        mutableMapOf(
-                            "top" to pxFromDp(81f),
-                            "left" to pxFromDp(48f),
-                            "bottom" to 0,
-                            "right" to 0
-                        )
+            if(hasSoftKeys()) {
+                insetsPadding = mutableMapOf(
+                    Surface.ROTATION_0 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to pxFromDp(48f),
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_90 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to pxFromDp(48f)
+                            ),
+                    Surface.ROTATION_180 to // not always called, have to enable setting first
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to pxFromDp(48f),
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_270 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to pxFromDp(48f),
+                                "bottom" to 0,
+                                "right" to 0
+                            )
 
-            )
+                )
 
-            hiddenInsetsPadding = mutableMapOf(
-                Surface.ROTATION_0 to
-                        mutableMapOf(
-                            "top" to pxFromDp(24f),
-                            "left" to 0,
-                            "bottom" to pxFromDp(48f),
-                            "right" to 0
-                        ),
-                Surface.ROTATION_90 to
-                        mutableMapOf(
-                            "top" to pxFromDp(24f),
-                            "left" to 0,
-                            "bottom" to 0,
-                            "right" to pxFromDp(48f)
-                        ),
-                Surface.ROTATION_180 to // not always called, have to enable setting first
-                        mutableMapOf(
-                            "top" to pxFromDp(24f),
-                            "left" to 0,
-                            "bottom" to pxFromDp(48f),
-                            "right" to 0
-                        ),
-                Surface.ROTATION_270 to
-                        mutableMapOf(
-                            "top" to pxFromDp(24f),
-                            "left" to pxFromDp(48f),
-                            "bottom" to 0,
-                            "right" to 0
-                        )
+                hiddenInsetsPadding = mutableMapOf(
+                    Surface.ROTATION_0 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to pxFromDp(48f),
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_90 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to pxFromDp(48f)
+                            ),
+                    Surface.ROTATION_180 to // not always called, have to enable setting first
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to pxFromDp(48f),
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_270 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to pxFromDp(48f),
+                                "bottom" to 0,
+                                "right" to 0
+                            )
+                )
+            }
+            else {
+                insetsPadding = mutableMapOf(
+                    Surface.ROTATION_0 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_90 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_180 to // not always called, have to enable setting first
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_270 to
+                            mutableMapOf(
+                                "top" to pxFromDp(81f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            )
 
-            )
+                )
+
+                hiddenInsetsPadding = mutableMapOf(
+                    Surface.ROTATION_0 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_90 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_180 to // not always called, have to enable setting first
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            ),
+                    Surface.ROTATION_270 to
+                            mutableMapOf(
+                                "top" to pxFromDp(24f),
+                                "left" to 0,
+                                "bottom" to 0,
+                                "right" to 0
+                            )
+                )
+            }
         }
     }
 
@@ -126,6 +192,23 @@ class PaddingManager(val activity: AppCompatActivity) {
             dm = activity.getSystemService(AppCompatActivity.DISPLAY_SERVICE) as DisplayManager
             dm?.registerDisplayListener(dl, h)
         }
+    }
+
+    fun hasSoftKeys(): Boolean {
+        val d = activity.windowManager.defaultDisplay
+        val realDisplayMetrics = DisplayMetrics()
+        d.getRealMetrics(realDisplayMetrics)
+
+        val realHeight = realDisplayMetrics.heightPixels
+        val realWidth = realDisplayMetrics.widthPixels
+
+        val displayMetrics = DisplayMetrics()
+        d.getMetrics(displayMetrics)
+
+        val displayHeight = displayMetrics.heightPixels
+        val displayWidth = displayMetrics.widthPixels
+
+        return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0
     }
 
     companion object {

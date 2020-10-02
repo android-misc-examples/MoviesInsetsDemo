@@ -1,3 +1,3 @@
 package com.github.razir.movies
 
-data class Movie(val thumbnail: Int)
+data class Movie(val thumbnailDrawable: Int)

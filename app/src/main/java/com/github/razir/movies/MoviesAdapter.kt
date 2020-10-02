@@ -25,7 +25,7 @@ class MoviesAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movi
     class MovieHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         fun bind(movie: Movie) {
-            itemView.movieThumbnailImageView.loadImage(movie.thumbnail)
+            itemView.movieThumbnailImageView.loadImage(movie.thumbnailDrawable)
         }
 
         private fun ImageView.loadImage(@DrawableRes drawable: Int?) {

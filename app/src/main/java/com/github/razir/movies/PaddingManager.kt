@@ -175,23 +175,21 @@ class PaddingManager(val activity: AppCompatActivity) {
     }
 
     fun registerDisplayListener(views: List<View>) {
-        if(dm == null) {
-            adjustPaddings(views)
+        adjustPaddings(views)
 
-            val dl = object : DisplayManager.DisplayListener {
-                override fun onDisplayAdded(p0: Int) {}
+        val dl = object : DisplayManager.DisplayListener {
+            override fun onDisplayAdded(p0: Int) {}
 
-                override fun onDisplayRemoved(p0: Int) {}
+            override fun onDisplayRemoved(p0: Int) {}
 
-                override fun onDisplayChanged(p0: Int) {
-                    Toast.makeText(activity, "Current orientation: "+activity.windowManager.defaultDisplay.rotation, Toast.LENGTH_SHORT).show()
-                    adjustPaddings(views)
-                }
+            override fun onDisplayChanged(p0: Int) {
+                Toast.makeText(activity, "Current orientation: "+activity.windowManager.defaultDisplay.rotation, Toast.LENGTH_SHORT).show()
+                adjustPaddings(views)
             }
-
-            dm = activity.getSystemService(AppCompatActivity.DISPLAY_SERVICE) as DisplayManager
-            dm?.registerDisplayListener(dl, h)
         }
+
+        dm = activity.getSystemService(AppCompatActivity.DISPLAY_SERVICE) as DisplayManager
+        dm.registerDisplayListener(dl, h)
     }
 
     fun hasSoftKeys(): Boolean {
@@ -211,11 +209,12 @@ class PaddingManager(val activity: AppCompatActivity) {
         return (realWidth - displayWidth) > 0 || (realHeight - displayHeight) > 0
     }
 
+    lateinit var dm: DisplayManager
+
     companion object {
         var hidden = false
         var insetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
         var hiddenInsetsPadding : MutableMap<Int, MutableMap<String, Int>> = mutableMapOf()
         val h = Handler()
-        var dm: DisplayManager? = null
     }
 }

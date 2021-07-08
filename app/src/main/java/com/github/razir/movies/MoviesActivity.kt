@@ -1,13 +1,11 @@
 package com.github.razir.movies
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.*
 import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.github.razir.movies.utils.GridItemDecorator
@@ -15,7 +13,7 @@ import com.github.razir.movies.utils.getTestData
 import kotlinx.android.synthetic.main.activity_movies.*
 
 
-class MoviesActivity : AppCompatActivity() {
+class MoviesActivity : Activity() {
 
     lateinit var paddingManager: PaddingManager
     lateinit var viewList: List<View>
@@ -23,11 +21,9 @@ class MoviesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
-        supportActionBar?.setBackgroundDrawable(ColorDrawable(Color.argb(128, 0, 0, 0)))
 
         paddingManager = PaddingManager(this)
 
-        if(PaddingManager.hidden) supportActionBar?.hide()
         setContentView(R.layout.activity_movies)
 
         initView()
@@ -50,10 +46,6 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     fun toggleActionBar(unused: View?) {
-        if(PaddingManager.hidden)
-            supportActionBar?.show()
-        else
-            supportActionBar?.hide()
         PaddingManager.hidden = !PaddingManager.hidden
 
         paddingManager.adjustPaddings(viewList)
